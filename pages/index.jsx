@@ -15,6 +15,7 @@ import {
   withAuthUser,
 } from "../utils/NextFirebaseAuth";
 import AutoBreadCrumbs from "../components/AutoBreadCrumbs";
+import FullPageLoader from "../components/FullPageLoader";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -30,7 +31,7 @@ function Home() {
 
   return (
     <React.Fragment>
-      <CustomAppBar signout={authUser.signOut} />
+      <CustomAppBar signout={authUser.signOut} user={authUser} />
       <AutoBreadCrumbs />
       <LinkBar />
       <Container className={classes.container}>
@@ -49,8 +50,11 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {};
 }
-
 export default withAuthUser({
+  whenUnauthedBeforeInit: authAction.SHOW_LOADER,
   whenUnauthedAfterInit: authAction.REDIRECT_TO_LOGIN,
-  whenUnauthedBeforeInit: authAction.REDIRECT_TO_LOGIN,
+  whenUnauthed: authAction.REDIRECT_TO_LOGIN,
+  LoaderComponent: () => {
+    return <FullPageLoader />;
+  },
 })(connect(mapStateToProps, mapDispatchToProps)(Home));

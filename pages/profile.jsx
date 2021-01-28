@@ -1,0 +1,190 @@
+import firebase from "../utils/firebaseClient";
+import { connect } from "react-redux";
+import React from "react";
+import AutoBreadCrumbs from "../components/AutoBreadCrumbs";
+import CustomAppBar from "../components/CustomAppBar";
+import {
+  authAction,
+  useAuthUser,
+  withAuthUser,
+} from "../utils/NextFirebaseAuth";
+import FullPageLoader from "../components/FullPageLoader";
+import {
+  Button,
+  Container,
+  FormControl,
+  Grid,
+  makeStyles,
+  MenuItem,
+  Select,
+  TextField,
+} from "@material-ui/core";
+import { Controller, useForm } from "react-hook-form";
+import CountrySelect from "../components/CountrySelect";
+import FormAutocomplete from "../components/FormAutocomplete";
+import { useState } from "react";
+import { useEffect } from "react";
+import ProfileTable from "../components/ProfileTable";
+import { getById } from "../utils/general";
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  formControl: {
+    minWidth: 400,
+    paddingTop: "40px",
+  },
+}));
+
+function Profile() {
+  const classes = useStyles();
+  const authUser = useAuthUser();
+  const { register, handleSubmit, control, reset } = useForm();
+  const [profileEdit, setProfileEdit] = useState(false);
+  const [profile, setProfile] = useState({});
+
+  useEffect(() => {
+    getById("profile", authUser.id).then((data) => {
+      if (data) {
+        setProfile(data);
+      } else {
+        setProfileEdit(true);
+      }
+    });
+  }, [profileEdit]);
+
+  const handleOnSubmit = (data) => {
+    const updateProfile = async () => {
+      await firebase
+        .firestore()
+        .collection("profile")
+        .doc(authUser.id)
+        .set(data);
+    };
+    updateProfile();
+    setProfile(data);
+    setProfileEdit(false);
+  };
+
+  return (
+    <React.Fragment>
+      <CustomAppBar signout={authUser.signOut} user={authUser} />
+      <AutoBreadCrumbs />
+      <Container className={classes.root}>
+        {profileEdit ? (
+          <Container className={classes.root}>
+            <form onSubmit={handleSubmit(handleOnSubmit)}>
+              <FormControl className={classes.formControl}>
+                <TextField
+                  label="Id"
+                  name="Id"
+                  fullWidth
+                  value={authUser.id}
+                  disabled
+                />
+                <TextField
+                  label="Name"
+                  inputRef={register({ required: true, maxLength: 20 })}
+                  name="Name"
+                  fullWidth
+                />
+
+                <Controller
+                  control={control}
+                  name="Gender"
+                  defaultValue=""
+                  as={
+                    <TextField
+                      inputRef={register}
+                      select
+                      label="Gender"
+                      name="Gender"
+                      fullWidth
+                    >
+                      <MenuItem value="Male">Male</MenuItem>
+                      <MenuItem value="Female">Female</MenuItem>
+                      <MenuItem value="Other">Other</MenuItem>
+                    </TextField>
+                  }
+                />
+
+                {/* <FormAutocomplete options={[]} control={control} name="Followers" /> */}
+
+                <TextField
+                  label="Address1"
+                  inputRef={register}
+                  name="Address1"
+                  fullWidth
+                />
+
+                <TextField
+                  label="Address2"
+                  inputRef={register}
+                  name="Address2"
+                  fullWidth
+                />
+
+                <CountrySelect control={control} onChange={() => {}} />
+
+                <TextField
+                  label="Phone Number"
+                  inputRef={register}
+                  name="PhoneNo"
+                  fullWidth
+                />
+                <TextField
+                  label="Email"
+                  inputRef={register({ required: true, maxLength: 30 })}
+                  name="Email"
+                  fullWidth
+                />
+                <Button type="submit">Save</Button>
+                <Button
+                  onClick={() => {
+                    reset();
+                    setProfileEdit(false);
+                  }}
+                >
+                  Cancel
+                </Button>
+              </FormControl>
+            </form>
+          </Container>
+        ) : (
+          <Grid container direction="column">
+            <Grid item>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => setProfileEdit(true)}
+              >
+                Edit
+              </Button>
+            </Grid>
+            <Grid item>
+              <ProfileTable profile={profile} />
+            </Grid>
+          </Grid>
+        )}
+      </Container>
+    </React.Fragment>
+  );
+}
+function mapStateToProps(state) {
+  return {};
+}
+
+function mapDispatchToProps(dispatch) {
+  return {};
+}
+export default withAuthUser({
+  whenUnauthedBeforeInit: authAction.SHOW_LOADER,
+  whenUnauthedAfterInit: authAction.REDIRECT_TO_LOGIN,
+  whenUnauthed: authAction.REDIRECT_TO_LOGIN,
+  LoaderComponent: () => {
+    return <FullPageLoader />;
+  },
+})(connect(mapStateToProps, mapDispatchToProps)(Profile));

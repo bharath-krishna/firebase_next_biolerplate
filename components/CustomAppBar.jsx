@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function CustomAppBar({ user, signout }) {
+function CustomAppBar({ user }) {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
@@ -62,7 +62,7 @@ function CustomAppBar({ user, signout }) {
               {/* next-firebase-auth does not provide user name in the AuthUser so use email */}
               {user.email}
             </Typography>
-            <Button color="inherit" onClick={signout}>
+            <Button color="inherit" onClick={user.signOut}>
               Logout
             </Button>
             <IconButton
@@ -101,9 +101,7 @@ function CustomAppBar({ user, signout }) {
 }
 
 function mapStateToProps(state) {
-  return {
-    user: state.user,
-  };
+  return {};
 }
 
 function mapDispatchToProps(dispatch) {
