@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Home({ people }) {
+function Home() {
   const classes = useStyles();
   const authUser = useAuthUser();
 
@@ -38,21 +38,12 @@ function Home({ people }) {
           Welcome to Server Rendered (SSR) Page
         </Typography>
       </Container>
-      <Container className={classes.container}>
-        <List>
-          {people.map((person, index) => {
-            return <ListItem key={index}>{person.Name}</ListItem>;
-          })}
-        </List>
-      </Container>
     </React.Fragment>
   );
 }
 
 function mapStateToProps(state) {
-  return {
-    people: state.people,
-  };
+  return {};
 }
 
 function mapDispatchToProps(dispatch) {

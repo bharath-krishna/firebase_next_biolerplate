@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Home({ people }) {
+function Home() {
   const classes = useStyles();
   const authUser = useAuthUser();
 
@@ -41,29 +41,16 @@ function Home({ people }) {
           Welcome to Static Page
         </Typography>
       </Container>
-      <Container className={classes.container}>
-        <List>
-          {people.map((person, index) => {
-            return <ListItem key={index}>{person.Name}</ListItem>;
-          })}
-        </List>
-      </Container>
     </React.Fragment>
   );
 }
 
 function mapStateToProps(state) {
-  return {
-    user: state.user,
-    people: state.people,
-  };
+  return {};
 }
 
 function mapDispatchToProps(dispatch) {
-  return {
-    setUser: (name) => dispatch(setUser(name)),
-    setPeople: (people) => dispatch(setPeople(people)),
-  };
+  return {};
 }
 
 export default withAuthUser({
