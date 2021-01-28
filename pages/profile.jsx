@@ -21,7 +21,7 @@ import {
 } from "@material-ui/core";
 import { Controller, useForm } from "react-hook-form";
 import CountrySelect from "../components/CountrySelect";
-import FormAutocomplete from "../components/FormAutocomplete";
+// import FormAutocomplete from "../components/FormAutoComplete";
 import { useState } from "react";
 import { useEffect } from "react";
 import ProfileTable from "../components/ProfileTable";
@@ -111,11 +111,11 @@ function Profile() {
                   }
                 />
 
-                <FormAutocomplete
+                {/* <FormAutocomplete
                   options={[]}
                   control={control}
                   name="Followers"
-                />
+                /> */}
 
                 <TextField
                   label="Address1"
