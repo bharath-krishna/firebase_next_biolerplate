@@ -1,10 +1,4 @@
-import {
-  SET_EDIT_ID,
-  SET_OPEN,
-  SET_PEOPLE,
-  SET_PERSON,
-  SET_SEARCH_NAME,
-} from "../constants";
+import { SET_PEOPLE } from "../constants";
 
 const initialPeopleState = [];
 export const peopleReducer = (state = initialPeopleState, action) => {
@@ -17,58 +11,3 @@ export const peopleReducer = (state = initialPeopleState, action) => {
     }
   }
 };
-
-// let initialPersonState = {
-//   id: "",
-//   Name: "",
-//   Children: [],
-//   Partners: [],
-//   Gender: "",
-// };
-
-// export const personReducer = (
-//   state: PersonModel = initialPersonState,
-//   action
-// ) => {
-//   switch (action.type) {
-//     case SET_PERSON: {
-//       return action.payload;
-//     }
-//     default: {
-//       return state;
-//     }
-//   }
-// };
-
-// export const searchNameReducer = (state: string = "", action) => {
-//   switch (action.type) {
-//     case SET_SEARCH_NAME: {
-//       return action.payload;
-//     }
-//     default: {
-//       return state;
-//     }
-//   }
-// };
-
-// export const editIdReducer = (state: string = "", action) => {
-//   switch (action.type) {
-//     case SET_EDIT_ID: {
-//       return action.payload;
-//     }
-//     default: {
-//       return state;
-//     }
-//   }
-// };
-
-// export const openReducer = (state: boolean = false, action) => {
-//   switch (action.type) {
-//     case SET_OPEN: {
-//       return action.payload;
-//     }
-//     default: {
-//       return state;
-//     }
-//   }
-// };

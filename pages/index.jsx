@@ -1,26 +1,18 @@
 import { connect } from "react-redux";
-import React, { useEffect } from "react";
+import React from "react";
 import {
-  AppBar,
-  Button,
   Container,
   List,
   ListItem,
   makeStyles,
-  TextField,
-  Toolbar,
   Typography,
 } from "@material-ui/core";
-import Link from "next/link";
-import getAbsoluteURL from "../utils/getAbsoluteURL";
-import { setUser } from "../redux/actions/user";
 import CustomAppBar from "../components/CustomAppBar";
 import LinkBar from "../components/LinkBar";
 import {
   authAction,
   useAuthUser,
   withAuthUser,
-  withAuthUserTokenSSR,
 } from "../utils/NextFirebaseAuth";
 import AutoBreadCrumbs from "../components/AutoBreadCrumbs";
 
@@ -32,12 +24,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Home({ people, setUser }) {
+function Home({ people }) {
   const classes = useStyles();
   const authUser = useAuthUser();
-  useEffect(() => {
-    setUser(authUser);
-  }, []);
 
   return (
     <React.Fragment>
@@ -60,41 +49,14 @@ function Home({ people, setUser }) {
   );
 }
 
-export const getServerSideProps = withAuthUserTokenSSR({
-  whenUnauthed: authAction.REDIRECT_TO_LOGIN,
-})(async ({ AuthUser, req }) => {
-  let data;
-  const token = await AuthUser.getIdToken();
-  const url = getAbsoluteURL("/api/data", req);
-  const response = await fetch(url, {
-    headers: {
-      Authorization: token,
-    },
-  });
-  data = await response.json();
-  if (!response.ok) {
-    throw new Error(
-      `Data fetching failed with status ${response.status}: ${JSON.stringify(
-        data
-      )}`
-    );
-  }
-
-  return {
-    people: data,
-  };
-});
-
 function mapStateToProps(state) {
   return {
-    user: state.user,
+    people: state.people,
   };
 }
 
 function mapDispatchToProps(dispatch) {
-  return {
-    setUser: (name) => dispatch(setUser(name)),
-  };
+  return {};
 }
 
 export default withAuthUser({

@@ -7,8 +7,6 @@ import {
   makeStyles,
   Typography,
 } from "@material-ui/core";
-import Link from "next/link";
-import getAbsoluteURL from "../utils/getAbsoluteURL";
 import { setUser } from "../redux/actions/user";
 import CustomAppBar from "../components/CustomAppBar";
 import { setPeople } from "../redux/actions/people";
@@ -18,8 +16,6 @@ import {
   useAuthUser,
   withAuthUser,
 } from "../utils/NextFirebaseAuth";
-import useSWR from "swr";
-// import axios from "axios";
 import FullPageLoader from "../components/FullPageLoader";
 import AutoBreadCrumbs from "../components/AutoBreadCrumbs";
 
@@ -31,28 +27,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Home({ people2, user, setUser, setPeople }) {
+function Home({ people }) {
   const classes = useStyles();
   const authUser = useAuthUser();
-  const fetcher = async (url) =>
-    fetch(url, {
-      headers: {
-        Authorization: await authUser.getIdToken(),
-      },
-    }).then((r) => r.json());
-  // Can use axios also
-  // const fetcher = async (url) =>
-  //   await axios
-  //     .get(url, {
-  //       headers: {
-  //         Authorization: await authUser.getIdToken(),
-  //       },
-  //     })
-  //     .then((res) => res.data);
-
-  const { data, error } = useSWR(getAbsoluteURL("/api/data"), fetcher);
-  if (error) return <div>failed to load</div>;
-  if (!data) return <FullPageLoader />;
 
   return (
     <React.Fragment>
@@ -66,7 +43,7 @@ function Home({ people2, user, setUser, setPeople }) {
       </Container>
       <Container className={classes.container}>
         <List>
-          {data.map((person, index) => {
+          {people.map((person, index) => {
             return <ListItem key={index}>{person.Name}</ListItem>;
           })}
         </List>
