@@ -7,11 +7,12 @@ import {
   Toolbar,
   Typography,
 } from "@material-ui/core";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CustomLink from "../src/CustomLink";
 import MenuIcon from "@material-ui/icons/Menu";
 import { connect } from "react-redux";
 import { AccountCircle } from "@material-ui/icons";
+import { getById } from "../utils/general";
 
 const useStyles = makeStyles((theme) => ({
   appbar: {
@@ -29,6 +30,12 @@ function CustomAppBar({ user }) {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
+  const [profile, setProfile] = useState({});
+  useEffect(() => {
+    if (user.id) {
+      getById("profile", user.id).then((data) => setProfile(data));
+    }
+  }, [user]);
 
   const isMenuOpen = Boolean(anchorEl);
 
@@ -60,7 +67,7 @@ function CustomAppBar({ user }) {
           <React.Fragment>
             <Typography variant="h6" className={classes.title}>
               {/* next-firebase-auth does not provide user name in the AuthUser so use email */}
-              {user.email}
+              {profile.Name}
             </Typography>
             <Button color="inherit" onClick={user.signOut}>
               Logout

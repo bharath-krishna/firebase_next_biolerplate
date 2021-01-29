@@ -8,6 +8,7 @@ import { userReducer } from "./reducers/user";
 import { combineReducers } from "redux";
 import thunkMiddleware from "redux-thunk";
 import { peopleReducer } from "./reducers/people";
+import { templeReducer } from "./reducers/temple";
 
 const bindMiddleware = (middleware) => {
   if (process.env.NODE_ENV !== "production") {
@@ -20,6 +21,7 @@ const bindMiddleware = (middleware) => {
 const allReducers = combineReducers({
   user: userReducer,
   people: peopleReducer,
+  temples: templeReducer,
 });
 
 const reducer = (state, action) => {

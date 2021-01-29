@@ -7,21 +7,19 @@ import CustomLink from "../src/CustomLink";
 function AutoBreadCrumbs() {
   const router = useRouter();
   let pathMap = {};
-  if (router.pathname == "/") {
-    pathMap["/"] = "Home";
-  } else {
-    router.pathname.split("/").map((pathName, index) => {
-      const currentUrl =
-        router.pathname.substr(0, router.pathname.indexOf("/" + pathName)) +
-        "/" +
-        pathName;
-      if (!pathName) {
-        pathMap[currentUrl] = "Home";
-      } else {
-        pathMap[currentUrl] = pathName;
-      }
-    });
-  }
+  let pathname = "";
+  let linkPath = "Home";
+  router.asPath.split("/").map((path) => {
+    if (path) {
+      pathname += path;
+      linkPath = path;
+      pathname += "/";
+      pathMap = { ...pathMap, [pathname]: linkPath };
+    } else {
+      pathname = "/";
+      pathMap = { ...pathMap, [pathname]: linkPath };
+    }
+  });
 
   return (
     <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />}>
