@@ -29,6 +29,14 @@ function LinkBar() {
       >
         Static
       </Button>
+      <Button
+        variant="contained"
+        color="primary"
+        component={CustomLink}
+        href="/temples"
+      >
+        Temples
+      </Button>
     </div>
   );
 }
