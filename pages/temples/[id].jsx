@@ -1,9 +1,16 @@
+import { connect } from "react-redux";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import AutoBreadCrumbs from "../../components/AutoBreadCrumbs";
 import CustomAppBar from "../../components/CustomAppBar";
+import { setTemples } from "../../redux/actions/temple";
 import { getById } from "../../utils/general";
-import { useAuthUser, withAuthUser } from "../../utils/NextFirebaseAuth";
+import {
+  authAction,
+  useAuthUser,
+  withAuthUser,
+} from "../../utils/NextFirebaseAuth";
+import FullPageLoader from "../../components/FullPageLoader";
 
 function TempleItem() {
   const authUser = useAuthUser();
@@ -26,4 +33,25 @@ function TempleItem() {
     </React.Fragment>
   );
 }
-export default withAuthUser()(TempleItem);
+
+function mapStateToProps(state) {
+  return {
+    temples: state.temples,
+    user: state.user,
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    setTemples: (temples) => dispatch(setTemples(temples)),
+  };
+}
+
+export default withAuthUser({
+  whenUnauthedBeforeInit: authAction.SHOW_LOADER,
+  whenUnauthedAfterInit: authAction.REDIRECT_TO_LOGIN,
+  whenUnauthed: authAction.REDIRECT_TO_LOGIN,
+  LoaderComponent: () => {
+    return <FullPageLoader />;
+  },
+})(connect(mapStateToProps, mapDispatchToProps)(TempleItem));
