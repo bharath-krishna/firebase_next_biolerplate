@@ -9,10 +9,26 @@ import {
   authAction,
   useAuthUser,
   withAuthUser,
+  withAuthUserTokenSSR,
 } from "../../utils/NextFirebaseAuth";
 import FullPageLoader from "../../components/FullPageLoader";
+import { Container, makeStyles, Typography } from "@material-ui/core";
+import ObjectTable from "../../components/ObjectTable";
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  formControl: {
+    minWidth: 400,
+    paddingTop: "40px",
+  },
+}));
 
 function TempleItem() {
+  const classes = useStyles();
   const authUser = useAuthUser();
   const router = useRouter();
   const { id } = router.query;
@@ -30,6 +46,10 @@ function TempleItem() {
     <React.Fragment>
       <CustomAppBar user={authUser} />
       <AutoBreadCrumbs />
+      <Typography variant="h6">{temple?.Name}</Typography>
+      <Container className={classes.root}>
+        <ObjectTable object={temple} />
+      </Container>
     </React.Fragment>
   );
 }

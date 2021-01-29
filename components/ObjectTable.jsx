@@ -16,10 +16,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function ProfileTable({ profile }) {
+function ObjectTable({ object }) {
   const classes = useStyles();
-  if (!profile) {
-    return {};
+  if (!object) {
+    return <React.Fragment>No data</React.Fragment>;
   }
   return (
     <TableContainer component={Paper}>
@@ -31,19 +31,21 @@ function ProfileTable({ profile }) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {Object.keys(profile).map((key) => {
-            if (key == "Country") {
+          {Object.keys(object).map((key) => {
+            if (typeof object[key] == "object") {
               return (
                 <TableRow key={key}>
                   <TableCell>{key}</TableCell>
-                  <TableCell>{profile[key]["label"]}</TableCell>
+                  <TableCell>
+                    <ObjectTable object={object[key]} />
+                  </TableCell>
                 </TableRow>
               );
             }
             return (
-              <TableRow>
+              <TableRow key={key}>
                 <TableCell>{key}</TableCell>
-                <TableCell>{profile[key]}</TableCell>
+                <TableCell>{object[key]}</TableCell>
               </TableRow>
             );
           })}
@@ -53,4 +55,4 @@ function ProfileTable({ profile }) {
   );
 }
 
-export default ProfileTable;
+export default ObjectTable;

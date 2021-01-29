@@ -24,7 +24,7 @@ import CountrySelect from "../components/CountrySelect";
 // import FormAutocomplete from "../components/FormAutoComplete";
 import { useState } from "react";
 import { useEffect } from "react";
-import ProfileTable from "../components/ProfileTable";
+import ObjectTable from "../components/ObjectTable";
 import { getById } from "../utils/general";
 
 const useStyles = makeStyles((theme) => ({
@@ -47,13 +47,15 @@ function Profile() {
   const [profile, setProfile] = useState({});
 
   useEffect(() => {
-    getById("profile", authUser.id).then((data) => {
-      if (data) {
-        setProfile(data);
-      } else {
-        setProfileEdit(true);
-      }
-    });
+    if (authUser.id) {
+      getById("profile", authUser.id).then((data) => {
+        if (data) {
+          setProfile(data);
+        } else {
+          setProfileEdit(true);
+        }
+      });
+    }
   }, [profileEdit]);
 
   const handleOnSubmit = (data) => {
@@ -169,7 +171,7 @@ function Profile() {
               </Button>
             </Grid>
             <Grid item>
-              <ProfileTable profile={profile} />
+              <ObjectTable object={profile} />
             </Grid>
           </Grid>
         )}
@@ -192,3 +194,5 @@ export default withAuthUser({
     return <FullPageLoader />;
   },
 })(connect(mapStateToProps, mapDispatchToProps)(Profile));
+
+// export default connect(mapStateToProps, mapDispatchToProps)(Profile);
