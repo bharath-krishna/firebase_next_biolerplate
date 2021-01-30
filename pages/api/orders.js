@@ -17,15 +17,12 @@ export default async (req, res) => {
 
     if (!order) {
       res.statusCode = 500;
-      res.json("Some error occurred");
-      console.log("no order");
-      return;
+      res.json({ error: "No order" });
     }
 
     res.json(order);
   } catch (error) {
     res.statusCode = 500;
-    console.log(error);
-    res.json(error);
+    res.json({ error: "error" });
   }
 };
