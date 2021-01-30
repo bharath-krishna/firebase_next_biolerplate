@@ -24,6 +24,6 @@ export default async (req, res) => {
     res.json(order);
   } catch (error) {
     res.statusCode = 500;
-    res.json({ error: "error" });
+    res.json({ error: error });
   }
 };
