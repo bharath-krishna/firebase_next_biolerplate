@@ -1,3 +1,4 @@
+import shortid from "shortid";
 import Razorpay from "razorpay";
 
 export default async (req, res) => {
@@ -10,7 +11,7 @@ export default async (req, res) => {
     const options = {
       amount: 1500,
       currency: "INR",
-      receipt: "random_string_use_shortid",
+      receipt: shortid.generate(),
     };
 
     const order = await instance.orders.create(options);
