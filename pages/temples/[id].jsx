@@ -103,7 +103,12 @@ function TempleItem() {
       return;
     }
 
-    const result = await axios.post("/api/orders");
+    const config = {
+      headers: {
+        Authorization: await authUser.getIdToken(),
+      },
+    };
+    const result = await axios.post("/api/orders", {}, config);
 
     if (!result) {
       alert("Server error. Are you online?");
@@ -116,8 +121,8 @@ function TempleItem() {
       key: process.env.RAZORPAY_KEY_ID,
       amount: amount.toString(),
       currency: currency,
-      name: "Temple Trust.",
-      description: "Test Transaction",
+      name: temple.Name,
+      description: "Temple Donation",
       // image: { logo },
       order_id: order_id,
       handler: async function (response) {
@@ -161,7 +166,7 @@ function TempleItem() {
         open={open}
         autoHideDuration={6000}
         onClose={handleClose}
-        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
       >
         <Alert onClose={handleClose} severity={severity}>
           {transactionMessage}
