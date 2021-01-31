@@ -9,11 +9,11 @@ import {
   authAction,
   useAuthUser,
   withAuthUser,
-  withAuthUserTokenSSR,
 } from "../../utils/NextFirebaseAuth";
 import FullPageLoader from "../../components/FullPageLoader";
-import { Container, makeStyles, Typography } from "@material-ui/core";
+import { Container, Grid, makeStyles, Typography } from "@material-ui/core";
 import ObjectTable from "../../components/ObjectTable";
+import PaymentButton from "../../components/PaymentButton";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -33,7 +33,6 @@ function TempleItem() {
   const router = useRouter();
   const { id } = router.query;
   const [temple, setTemple] = useState();
-
   useEffect(() => {
     getById("temples", id).then((data) => {
       if (data) {
@@ -48,7 +47,12 @@ function TempleItem() {
       <AutoBreadCrumbs />
       <Typography variant="h6">{temple?.Name}</Typography>
       <Container className={classes.root}>
-        <ObjectTable object={temple} />
+        <Grid container direction="column">
+          <Grid item>{temple && <PaymentButton temple={temple} />}</Grid>
+          <Grid item>
+            <ObjectTable object={temple} />
+          </Grid>
+        </Grid>
       </Container>
     </React.Fragment>
   );
@@ -75,3 +79,5 @@ export default withAuthUser({
     return <FullPageLoader />;
   },
 })(connect(mapStateToProps, mapDispatchToProps)(TempleItem));
+
+// export default connect(mapStateToProps, mapDispatchToProps)(TempleItem);
