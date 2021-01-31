@@ -1,12 +1,6 @@
 import { connect } from "react-redux";
 import React from "react";
-import {
-  Container,
-  List,
-  ListItem,
-  makeStyles,
-  Typography,
-} from "@material-ui/core";
+import { Container, makeStyles, Typography } from "@material-ui/core";
 import CustomAppBar from "../components/CustomAppBar";
 import LinkBar from "../components/LinkBar";
 import {

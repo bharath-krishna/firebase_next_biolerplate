@@ -67,7 +67,7 @@ function CustomAppBar({ user }) {
           <React.Fragment>
             <Typography variant="h6" className={classes.title}>
               {/* next-firebase-auth does not provide user name in the AuthUser so use email */}
-              {profile.Name}
+              {profile?.Name}
             </Typography>
             <Button color="inherit" onClick={user.signOut}>
               Logout
