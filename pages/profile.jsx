@@ -73,7 +73,7 @@ function Profile() {
 
   return (
     <React.Fragment>
-      <CustomAppBar signout={authUser.signOut} user={authUser} />
+      <CustomAppBar user={authUser} />
       <AutoBreadCrumbs />
       <Container className={classes.root}>
         {profileEdit ? (
@@ -179,6 +179,7 @@ function Profile() {
     </React.Fragment>
   );
 }
+
 function mapStateToProps(state) {
   return {};
 }

@@ -33,7 +33,7 @@ function Home() {
 
   return (
     <React.Fragment>
-      <CustomAppBar signout={authUser.signOut} user={authUser} />
+      <CustomAppBar user={authUser} />
       <AutoBreadCrumbs />
       <LinkBar />
       <Container className={classes.container}>

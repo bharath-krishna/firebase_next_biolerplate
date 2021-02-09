@@ -1,5 +1,5 @@
 import { Breadcrumbs, Button, Container, List } from "@material-ui/core";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { fetchCollection } from "../../utils/temple";
 import { connect } from "react-redux";
 import { setTemples } from "../../redux/actions/temple";
@@ -15,19 +15,42 @@ import {
 import FullPageLoader from "../../components/FullPageLoader";
 import AutoBreadCrumbs from "../../components/AutoBreadCrumbs";
 import { useRouter } from "next/router";
+import LinkBar from "../../components/LinkBar";
+import AddTempleDialog from "../../components/AddTempleDialog";
 
 function Temples({ setTemples, temples }) {
   const authUser = useAuthUser();
   const router = useRouter();
+  const [open, setOpen] = useState(false);
+
   useEffect(() => {
     fetchCollection("temples", setTemples);
   }, []);
+
+  const handleAddTemple = () => {};
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   return (
     <React.Fragment>
       <CustomAppBar user={authUser} />
       <AutoBreadCrumbs />
+      <LinkBar />
       <Container>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => setOpen(true)}
+        >
+          Add Temple
+        </Button>
+        <AddTempleDialog
+          open={open}
+          setOpen={setOpen}
+          handleClose={handleClose}
+        />
         <List>
           {temples.length > 0 ? (
             temples.map((temple, index) => {

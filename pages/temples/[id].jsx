@@ -1,3 +1,4 @@
+import firebase from "../../utils/firebaseClient";
 import { connect } from "react-redux";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
@@ -11,7 +12,13 @@ import {
   withAuthUser,
 } from "../../utils/NextFirebaseAuth";
 import FullPageLoader from "../../components/FullPageLoader";
-import { Container, Grid, makeStyles, Typography } from "@material-ui/core";
+import {
+  Button,
+  Container,
+  Grid,
+  makeStyles,
+  Typography,
+} from "@material-ui/core";
 import ObjectTable from "../../components/ObjectTable";
 import PaymentButton from "../../components/PaymentButton";
 
@@ -33,6 +40,7 @@ function TempleItem() {
   const router = useRouter();
   const { id } = router.query;
   const [temple, setTemple] = useState();
+  const [follower, setFollower] = useState(false);
   useEffect(() => {
     getById("temples", id).then((data) => {
       if (data) {
@@ -41,6 +49,34 @@ function TempleItem() {
     });
   }, [id]);
 
+  useEffect(() => {
+    if (temple && temple.Followers.includes(authUser.id)) {
+      setFollower(true);
+    }
+  }, [temple, temple?.Followers]);
+
+  const followTemple = () => {
+    const updateTemple = async () => {
+      temple.Followers = [...temple.Followers, authUser.id];
+      await firebase.firestore().collection("temples").doc(id).set(temple);
+    };
+    updateTemple();
+    setTemple(temple);
+    setFollower(true);
+  };
+
+  const unfollowTemple = () => {
+    const updateTemple = async () => {
+      temple.Followers = temple.Followers.filter(
+        (item) => item !== authUser.id
+      );
+      await firebase.firestore().collection("temples").doc(id).set(temple);
+    };
+    updateTemple();
+    setTemple(temple);
+    setFollower(false);
+  };
+
   return (
     <React.Fragment>
       <CustomAppBar user={authUser} />
@@ -48,7 +84,30 @@ function TempleItem() {
       <Typography variant="h6">{temple?.Name}</Typography>
       <Container className={classes.root}>
         <Grid container direction="column">
-          <Grid item>{temple && <PaymentButton temple={temple} />}</Grid>
+          <Grid item>
+            {temple ? (
+              <React.Fragment>
+                <PaymentButton temple={temple} />
+                {follower ? (
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={unfollowTemple}
+                  >
+                    Unfollow
+                  </Button>
+                ) : (
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={followTemple}
+                  >
+                    Follow
+                  </Button>
+                )}
+              </React.Fragment>
+            ) : null}
+          </Grid>
           <Grid item>
             <ObjectTable object={temple} />
           </Grid>

@@ -31,7 +31,7 @@ const templeItem = ({ temple, ...rest }) => {
         <CardMedia image="./purple_landscape.jpeg" className={classes.media} />
         <CardContent className={classes.content}>
           <Typography>{temple.Name}</Typography>
-          <Typography>{temple.Followers} Followers</Typography>
+          <Typography>{temple.Followers.length} Followers</Typography>
         </CardContent>
       </Card>
     </ListItem>
