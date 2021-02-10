@@ -1,16 +1,15 @@
-import { connect } from "react-redux";
-import React from "react";
 import { Container, Grid, makeStyles, Typography } from "@material-ui/core";
+import React from "react";
+import { connect } from "react-redux";
+import AutoBreadCrumbs from "../components/AutoBreadCrumbs";
 import CustomAppBar from "../components/CustomAppBar";
+import FullPageLoader from "../components/FullPageLoader";
 import LinkBar from "../components/LinkBar";
 import {
   authAction,
   useAuthUser,
   withAuthUser,
 } from "../utils/NextFirebaseAuth";
-import AutoBreadCrumbs from "../components/AutoBreadCrumbs";
-import FullPageLoader from "../components/FullPageLoader";
-import ProductItem from "../components/ProductItem";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -43,13 +42,8 @@ function Home({ products }) {
 }
 
 export const getStaticProps = async () => {
-  const url = "http://localhost:1337/products";
-  const response = await fetch(url);
-  const products = await response.json();
   return {
-    props: {
-      products: products,
-    },
+    props: {},
   };
 };
 
