@@ -14,13 +14,12 @@ import {
 } from "../../utils/NextFirebaseAuth";
 import FullPageLoader from "../../components/FullPageLoader";
 import AutoBreadCrumbs from "../../components/AutoBreadCrumbs";
-import { useRouter } from "next/router";
 import LinkBar from "../../components/LinkBar";
 import AddTempleDialog from "../../components/AddTempleDialog";
 
 function Temples({ setTemples, temples }) {
   const authUser = useAuthUser();
-  const router = useRouter();
+
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -31,6 +30,7 @@ function Temples({ setTemples, temples }) {
 
   const handleClose = () => {
     setOpen(false);
+    fetchCollection("temples", setTemples);
   };
 
   return (
@@ -50,6 +50,7 @@ function Temples({ setTemples, temples }) {
           open={open}
           setOpen={setOpen}
           handleClose={handleClose}
+          setTemples={setTemples}
         />
         <List>
           {temples.length > 0 ? (
@@ -58,10 +59,7 @@ function Temples({ setTemples, temples }) {
                 <TempleItem
                   temple={temple}
                   key={index}
-                  button
-                  onClick={() => {
-                    router.push("/temples/" + temple.id);
-                  }}
+                  setTemples={setTemples}
                 />
               );
             })
@@ -95,3 +93,5 @@ export default withAuthUser({
     return <FullPageLoader />;
   },
 })(connect(mapStateToProps, mapDispatchToProps)(Temples));
+
+// export default connect(mapStateToProps, mapDispatchToProps)(Temples);

@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Home({ products }) {
+function Home() {
   const classes = useStyles();
   const authUser = useAuthUser();
 

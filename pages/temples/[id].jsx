@@ -21,6 +21,8 @@ import {
 } from "@material-ui/core";
 import ObjectTable from "../../components/ObjectTable";
 import PaymentButton from "../../components/PaymentButton";
+import AddTempleDialog from "../../components/AddTempleDialog";
+import TempleForm from "../../components/TempleForm";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -41,6 +43,8 @@ function TempleItem() {
   const { id } = router.query;
   const [temple, setTemple] = useState();
   const [follower, setFollower] = useState(false);
+  const [edit, setEdit] = useState(false);
+
   useEffect(() => {
     getById("temples", id).then((data) => {
       if (data) {
@@ -77,6 +81,10 @@ function TempleItem() {
     setFollower(false);
   };
 
+  const showEdit = () => {
+    setEdit(true);
+  };
+
   return (
     <React.Fragment>
       <CustomAppBar user={authUser} />
@@ -107,9 +115,16 @@ function TempleItem() {
                 )}
               </React.Fragment>
             ) : null}
+            <Button variant="contained" color="primary" onClick={showEdit}>
+              Edit
+            </Button>
           </Grid>
           <Grid item>
-            <ObjectTable object={temple} />
+            {edit ? (
+              <TempleForm setOpen={setEdit} />
+            ) : (
+              <ObjectTable object={temple} />
+            )}
           </Grid>
         </Grid>
       </Container>
