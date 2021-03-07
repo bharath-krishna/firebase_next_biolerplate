@@ -66,7 +66,12 @@ function TempleForm({ setOpen, people, setPeople, setTemples }) {
           name="PradhanaArchaka"
         />
 
-        <FormAutocomplete options={people} control={control} name="Followers" />
+        <FormAutocomplete
+          options={people}
+          control={control}
+          name="Followers"
+          multiple
+        />
 
         <TextField
           label="Address1"

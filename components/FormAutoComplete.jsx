@@ -4,7 +4,7 @@ import Autocomplete from "@material-ui/lab/Autocomplete";
 import { Controller } from "react-hook-form";
 import { Avatar, Grid, Typography } from "@material-ui/core";
 
-export default function FormAutocomplete({ control, options, name }) {
+export default function FormAutocomplete({ control, options, name, ...rest }) {
   return (
     <Controller
       render={({ onChange, ...props }) => (
@@ -29,10 +29,10 @@ export default function FormAutocomplete({ control, options, name }) {
           onChange={(e, data) => {
             onChange(data);
           }}
-          multiple
           filterSelectedOptions
           autoHighlight
           {...props}
+          {...rest}
         />
       )}
       onChange={([, data]) => data}

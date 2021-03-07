@@ -17,12 +17,21 @@ import {
   Container,
   Grid,
   makeStyles,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
   Typography,
 } from "@material-ui/core";
 import ObjectTable from "../../components/ObjectTable";
 import PaymentButton from "../../components/PaymentButton";
 import AddTempleDialog from "../../components/AddTempleDialog";
 import TempleForm from "../../components/TempleForm";
+import FormAutocomplete from "../../components/FormAutoComplete";
+import { useForm } from "react-hook-form";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -33,6 +42,9 @@ const useStyles = makeStyles((theme) => ({
   formControl: {
     minWidth: 400,
     paddingTop: "40px",
+  },
+  table: {
+    minWidth: 400,
   },
 }));
 
@@ -123,7 +135,7 @@ function TempleItem() {
             {edit ? (
               <TempleForm setOpen={setEdit} />
             ) : (
-              <ObjectTable object={temple} />
+              <ShowTemple temple={temple} />
             )}
           </Grid>
         </Grid>
@@ -155,3 +167,61 @@ export default withAuthUser({
 })(connect(mapStateToProps, mapDispatchToProps)(TempleItem));
 
 // export default connect(mapStateToProps, mapDispatchToProps)(TempleItem);
+
+function ShowTemple({ temple }) {
+  const classes = useStyles();
+  const { register, handleSubmit, control, reset } = useForm();
+  if (!temple) {
+    return <React.Fragment>No data</React.Fragment>;
+  }
+  return (
+    <TableContainer component={Paper}>
+      <Table className={classes.table}>
+        <TableHead>
+          <TableRow>
+            <TableCell>Field Name</TableCell>
+            <TableCell>Data</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          <TableRow>
+            <TableCell>Name</TableCell>
+            <TableCell>{temple.Name}</TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell>Main Deity</TableCell>
+            <TableCell>{temple.MainDeity}</TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell>Manager</TableCell>
+            <TableCell>{temple.Manager.Name}</TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell>Poojari</TableCell>
+            <TableCell>{temple.Poojari.Name}</TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell>Pradhana Archaka</TableCell>
+            <TableCell>{temple.PradhanaArchaka.Name}</TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell>Followers Strength</TableCell>
+            <TableCell>{temple.Followers.length}</TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell>Phone No</TableCell>
+            <TableCell>{temple.PhoneNo}</TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell>Address1</TableCell>
+            <TableCell>{temple.Address1}</TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell>Email</TableCell>
+            <TableCell>{temple.Email}</TableCell>
+          </TableRow>
+        </TableBody>
+      </Table>
+    </TableContainer>
+  );
+}
