@@ -32,6 +32,7 @@ import AddTempleDialog from "../../components/AddTempleDialog";
 import TempleForm from "../../components/TempleForm";
 import FormAutocomplete from "../../components/FormAutoComplete";
 import { useForm } from "react-hook-form";
+import EditTempleForm from "../../components/EditTempleForm";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -48,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function TempleItem() {
+function TempleItem({ setTemples }) {
   const classes = useStyles();
   const authUser = useAuthUser();
   const router = useRouter();
@@ -60,7 +61,7 @@ function TempleItem() {
   useEffect(() => {
     getById("temples", id).then((data) => {
       if (data) {
-        setTemple(data);
+        setTemple({ ...data, id: id });
       }
     });
   }, [id]);
@@ -133,9 +134,13 @@ function TempleItem() {
           </Grid>
           <Grid item>
             {edit ? (
-              <TempleForm setOpen={setEdit} />
+              <EditTempleForm
+                setOpen={setEdit}
+                temple={temple}
+                setTemple={setTemple}
+              />
             ) : (
-              <ShowTemple temple={temple} />
+              <TempleTable temple={temple} />
             )}
           </Grid>
         </Grid>
@@ -168,7 +173,7 @@ export default withAuthUser({
 
 // export default connect(mapStateToProps, mapDispatchToProps)(TempleItem);
 
-function ShowTemple({ temple }) {
+function TempleTable({ temple }) {
   const classes = useStyles();
   const { register, handleSubmit, control, reset } = useForm();
   if (!temple) {
@@ -215,6 +220,14 @@ function ShowTemple({ temple }) {
           <TableRow>
             <TableCell>Address1</TableCell>
             <TableCell>{temple.Address1}</TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell>Address2</TableCell>
+            <TableCell>{temple.Address2}</TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell>Country</TableCell>
+            <TableCell>{temple.Country.label}</TableCell>
           </TableRow>
           <TableRow>
             <TableCell>Email</TableCell>
