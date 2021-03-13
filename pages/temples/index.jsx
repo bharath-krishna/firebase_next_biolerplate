@@ -19,6 +19,7 @@ import AddTempleDialog from "../../components/AddTempleDialog";
 
 function Temples({ setTemples, temples }) {
   const authUser = useAuthUser();
+  console.log(authUser);
 
   const [open, setOpen] = useState(false);
 

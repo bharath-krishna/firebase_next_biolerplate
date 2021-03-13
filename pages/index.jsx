@@ -1,15 +1,18 @@
 import { Container, Grid, makeStyles, Typography } from "@material-ui/core";
-import React from "react";
+import { useRouter } from "next/router";
+import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import AutoBreadCrumbs from "../components/AutoBreadCrumbs";
 import CustomAppBar from "../components/CustomAppBar";
 import FullPageLoader from "../components/FullPageLoader";
 import LinkBar from "../components/LinkBar";
+import { getById } from "../utils/general";
 import {
   authAction,
   useAuthUser,
   withAuthUser,
 } from "../utils/NextFirebaseAuth";
+import { createProfile } from "../utils/profile";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -22,6 +25,29 @@ const useStyles = makeStyles((theme) => ({
 function Home() {
   const classes = useStyles();
   const authUser = useAuthUser();
+  const router = useRouter();
+
+  useEffect(() => {
+    getById("profile", authUser.id)
+      .then((result) => {
+        if (!result) {
+          console.log("create profile");
+          createProfile({
+            id: authUser.id,
+            Name: "NewUser",
+            PhoneNo: "01234512345",
+            Gender: "",
+            Email: authUser.email,
+          });
+          router.push("/profile/" + authUser.id);
+        } else {
+          console.log(result);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   return (
     <React.Fragment>

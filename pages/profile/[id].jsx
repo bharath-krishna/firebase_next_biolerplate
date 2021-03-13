@@ -1,14 +1,14 @@
-import firebase from "../utils/firebaseClient";
+import firebase from "../../utils/firebaseClient";
 import { connect } from "react-redux";
 import React from "react";
-import AutoBreadCrumbs from "../components/AutoBreadCrumbs";
-import CustomAppBar from "../components/CustomAppBar";
+import AutoBreadCrumbs from "../../components/AutoBreadCrumbs";
+import CustomAppBar from "../../components/CustomAppBar";
 import {
   authAction,
   useAuthUser,
   withAuthUser,
-} from "../utils/NextFirebaseAuth";
-import FullPageLoader from "../components/FullPageLoader";
+} from "../../utils/NextFirebaseAuth";
+import FullPageLoader from "../../components/FullPageLoader";
 import {
   Button,
   Container,
@@ -20,12 +20,13 @@ import {
   TextField,
 } from "@material-ui/core";
 import { Controller, useForm } from "react-hook-form";
-import CountrySelect from "../components/CountrySelect";
+import CountrySelect from "../../components/CountrySelect";
 // import FormAutocomplete from "../components/FormAutoComplete";
 import { useState } from "react";
 import { useEffect } from "react";
-import ObjectTable from "../components/ObjectTable";
-import { getById } from "../utils/general";
+import ObjectTable from "../../components/ObjectTable";
+import { getById } from "../../utils/general";
+import { useRouter } from "next/router";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -45,10 +46,12 @@ function Profile() {
   const { register, handleSubmit, control, reset } = useForm();
   const [profileEdit, setProfileEdit] = useState(false);
   const [profile, setProfile] = useState({});
+  const router = useRouter();
+  const { id } = router.query;
 
   useEffect(() => {
-    if (authUser.id) {
-      getById("profile", authUser.id).then((data) => {
+    if (id) {
+      getById("profile", id).then((data) => {
         if (data) {
           setProfile(data);
         } else {
@@ -60,11 +63,7 @@ function Profile() {
 
   const handleOnSubmit = (data) => {
     const updateProfile = async () => {
-      await firebase
-        .firestore()
-        .collection("profile")
-        .doc(authUser.id)
-        .set(data);
+      await firebase.firestore().collection("profile").doc(id).set(data);
     };
     updateProfile();
     setProfile(data);
@@ -80,13 +79,7 @@ function Profile() {
           <Container className={classes.root}>
             <form onSubmit={handleSubmit(handleOnSubmit)}>
               <FormControl className={classes.formControl}>
-                <TextField
-                  label="Id"
-                  name="Id"
-                  fullWidth
-                  value={authUser.id}
-                  disabled
-                />
+                <TextField label="Id" name="Id" fullWidth value={id} disabled />
                 <TextField
                   label="Name"
                   inputRef={register({ required: true, maxLength: 20 })}
@@ -139,12 +132,6 @@ function Profile() {
                   label="Phone Number"
                   inputRef={register}
                   name="PhoneNo"
-                  fullWidth
-                />
-                <TextField
-                  label="Email"
-                  inputRef={register({ required: true, maxLength: 30 })}
-                  name="Email"
                   fullWidth
                 />
                 <Button type="submit">Save</Button>

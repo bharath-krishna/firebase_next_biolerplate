@@ -16,7 +16,7 @@ const firebaseAuthConfig = {
       // for email and password login
       // provider: firebase.auth.EmailAuthProvider.PROVIDER_ID,
       // for google oauth2 login
-      provider: firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+      provider: firebase.auth.EmailAuthProvider.PROVIDER_ID,
       requireDisplayName: false,
     },
   ],

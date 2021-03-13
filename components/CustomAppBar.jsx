@@ -13,6 +13,7 @@ import MenuIcon from "@material-ui/icons/Menu";
 import { connect } from "react-redux";
 import { AccountCircle } from "@material-ui/icons";
 import { getById } from "../utils/general";
+import { useAuthUser } from "../utils/NextFirebaseAuth";
 
 const useStyles = makeStyles((theme) => ({
   appbar: {
@@ -95,11 +96,19 @@ function CustomAppBar({ user }) {
         open={isMenuOpen}
         onClose={handleMenuClose}
       >
-        <Button color="inherit" component={CustomLink} href="/profile">
+        <Button
+          color="inherit"
+          component={CustomLink}
+          href={`/profile/${user.id}`}
+        >
           Profile
         </Button>
         <br></br>
-        <Button color="inherit" component={CustomLink} href="/account">
+        <Button
+          color="inherit"
+          component={CustomLink}
+          href={`/account/${user.id}`}
+        >
           My account
         </Button>
       </Menu>
